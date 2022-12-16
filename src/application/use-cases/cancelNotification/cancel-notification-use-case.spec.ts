@@ -1,19 +1,14 @@
-import { Content } from '@application/entities/notification/content';
-import { Notification } from '@application/entities/notification/notification';
+import { makeNotification } from '@test/factories/notification-factory';
 import { InMemmoryNotificationsRepository } from '@test/repositories/in-memmory-notifications-repository';
+import { NotificationNotFound } from '../errors/notification-not-fount';
 import { CancelNotification } from './cancel-notification-use-case';
-import { NotificationNotFound } from './errors/notification-not-fount';
 
 describe('Cancel notification', () => {
   it('should be able to send a notification', async () => {
     const notificationsRepository = new InMemmoryNotificationsRepository();
     const cancelNotificaton = new CancelNotification(notificationsRepository);
 
-    const notification = new Notification({
-      category: 'social',
-      content: new Content('invit friend solicitation'),
-      recipientId: 'exemple-recipient-id',
-    });
+    const notification = makeNotification();
 
     await notificationsRepository.create(notification);
 
