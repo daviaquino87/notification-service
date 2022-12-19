@@ -20,4 +20,15 @@ describe('read notification', () => {
       expect.any(Date),
     );
   });
+
+  it('should not be able to read a non existing notification', async () => {
+    const notificationsRepository = new InMemmoryNotificationsRepository();
+    const readNotificaton = new ReadNotification(notificationsRepository);
+
+    expect(() => {
+      return readNotificaton.execute({
+        notificationId: 'asas-asas-as',
+      });
+    }).rejects.toThrow(NotificationNotFound);
+  });
 });
