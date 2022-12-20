@@ -44,7 +44,7 @@ export class PrismaNotificationsRepository implements NotificationRepository {
 
   async create(notification: Notification): Promise<void> {
     const raw = PrismaNotificationMapper.toPrisma(notification);
-    this.prismaService.notification.create({
+    await this.prismaService.notification.create({
       data: raw,
     });
   }

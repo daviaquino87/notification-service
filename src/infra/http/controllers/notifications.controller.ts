@@ -19,6 +19,21 @@ export class NotificationsController {
     private getNotifications: GetRecipientNotification,
   ) {}
 
+  @Post()
+  async creat(@Body() body: CreateNotificationBody) {
+    const { content, category, recipientId } = body;
+
+    const { notification } = await this.sendNotification.execute({
+      content,
+      category,
+      recipientId,
+    });
+
+    return {
+      notification: NotificationViewModel.toHttp(notification),
+    };
+  }
+
   @Patch(':id/cancel')
   async cancel(@Param('id') id: string) {
     await this.cancelNotification.execute({ notificationId: id });
@@ -54,20 +69,5 @@ export class NotificationsController {
   @Patch(':id/unread')
   async unRead(@Param('id') id: string) {
     await this.unReadNotification.execute({ notificationId: id });
-  }
-
-  @Post()
-  async creat(@Body() body: CreateNotificationBody) {
-    const { content, category, recipientId } = body;
-
-    const { notification } = await this.sendNotification.execute({
-      content,
-      category,
-      recipientId,
-    });
-
-    return {
-      notification: NotificationViewModel.toHttp(notification),
-    };
   }
 }
